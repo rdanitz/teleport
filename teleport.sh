@@ -3,6 +3,15 @@
 !#
 (use-modules (ice-9 match) (dbi dbi))
 
+(read-enable 'hungry-eol-escapes)
+
+(define (show-not-found target)
+  (display
+    (string-append "With searching comes loss
+  and the presence of absence:
+    \"" target "\" not found.")
+    (current-error-port)))
+
 (define db
   (let ((xdg (getenv "XDG_CONFIG_HOME"))
         (sub "sqlite3"))
@@ -21,19 +30,19 @@
   (let ((q (string-append "select target from locations where mnemo = '" mnemo "'")))
     (dbi-query db q)
     (match (dbi-get_row db)
-      (#f (display "target is not defined" (current-error-port)) #f)
+      (#f (show-not-found mnemo) #f)
       (((_ . target)) target))))
 
 (define (find prefix)
-  (define (find')
+  (define (f)
     (let ((r (dbi-get_row db)))
       (when r
         (display (cdr (car r)) (current-error-port))
         (newline (current-error-port))
-        (find'))))
+        (f))))
   (let ((q (string-append "select mnemo from locations where mnemo like('" prefix "%')")))
     (dbi-query db q)
-    (find')))
+    (f)))
 
 (define (teleport target)
   (if target
@@ -54,4 +63,3 @@
     ((_ . mnemo)
       (teleport (query (string-join mnemo))))
     (else (help))))
-
