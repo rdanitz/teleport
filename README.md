@@ -8,7 +8,7 @@ Heavily inspired by https://github.com/bollu/teleport.
 - guile-dbd-sqlite3
 
 ## Setup
-Put the `teleport.sh` script somewhere in PATH, then add this to your profile:
+Put the `teleport.sh` script somewhere in `$PATH`, then add this to your profile:
 ```sh
 function tp() {
   $(teleport.sh "$@")
@@ -31,3 +31,7 @@ Jump around:
 cd ~
 tp here be dragons
 ```
+
+## Autocompletion (zsh)
+
+Put the `_tp` script somewhere in `$fpath`.

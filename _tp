@@ -1,0 +1,4 @@
+#compdef tp
+
+_arguments \
+  "*: :($(teleport.sh -l "${words[@]:1}" 2>&1 | awk -v i="$((${#words[@]}-1))" '{print $i}'))"
